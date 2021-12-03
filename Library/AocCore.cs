@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 
 namespace Aoc2021.Library
 {
@@ -6,13 +7,16 @@ namespace Aoc2021.Library
     {
         public static void ProcessSolutions(this ISolver solver)
         {
+            var stopWatch = new Stopwatch();
             Console.WriteLine("Problem name: " + solver.ProblemName);
             Console.WriteLine($"Day: " + solver.Day + Environment.NewLine);
 
-            foreach (var solution in solver.Solve())
-            {
-                Console.WriteLine("Solution: " + solution);
-            }
+            stopWatch.Start();
+            Console.WriteLine("Part 1: " + solver.PartOne(solver.Data) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
+            stopWatch.Start();
+            Console.WriteLine("Part 1: " + solver.PartTwo(solver.Data) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
+            stopWatch.Stop();
+
             Console.Write("\n");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(new string('\u00D7', 35));
@@ -31,9 +35,5 @@ namespace Aoc2021.Library
                 .Select(s => (ISolver?)Activator.CreateInstance(s) ?? null)
                 .NotNull()
                 .ToList();
-
-                //.ToDictionary(key => Attribute.GetCustomAttribute(key.GetType(), typeof(Problem)) as Problem ?? new Problem(0, ""), value => value)
-                //.Where(kvp => kvp.Key.Day != 0) // We keep DayNull around so we can do this hack. Any null attributed problem will default to a new instance of the DayNull problem which will be skipped
-                //.ToDictionary(k => k.Key, v => v.Value);
     }
 }

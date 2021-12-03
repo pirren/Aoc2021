@@ -8,20 +8,14 @@ namespace Aoc2021.Solutions
 
         public override int Day => 1;
 
-        public override IEnumerable<object> Solve()
-        {
-            yield return PartOne(Data);
-            yield return PartTwo(Data);
-        }
-
-        long PartOne(string[] data)
+        public override object PartOne(string[] data)
             => Enumerable.Range(1, data.Length - 1)
             .Select(i => new
             {
                 Increased = data[i].ToInt() > data[i - 1].ToInt()
             }).Count(s => s.Increased);
 
-        long PartTwo(string[] data)
+        public override object PartTwo(string[] data)
             => Enumerable.Range(1, data.Length - 1)
                 .Select(i => new
                 {

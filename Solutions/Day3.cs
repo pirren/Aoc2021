@@ -8,16 +8,10 @@ namespace Aoc2021.Solutions
 
         public override int Day => 3;
 
-        public override IEnumerable<object> Solve()
-        {
-            yield return PartOne(Data);
-            yield return PartTwo(Data);
-        }
-
         private static List<int> diagnostics = new();
         private static int reportItemLength;
 
-        long PartOne(string[] data)
+        public override object PartOne(string[] data)
         {
             reportItemLength = data.First().Length;
             diagnostics = ParseDiagnostics(data);
@@ -29,20 +23,20 @@ namespace Aoc2021.Solutions
             return gammaRate * (4095 ^ gammaRate);
         }
 
-        long PartTwo(string[] data)
+        public override object PartTwo(string[] data)
         {
             reportItemLength = data.First().Length;
             diagnostics = ParseDiagnostics(data);
 
-            return CalculateLifeSupportRating();
+            return LifeSupportRating();
         }
 
         private List<int> ParseDiagnostics(string[] data)
             => data.Select(d => Convert.ToInt32(d, 2)).ToList();
 
-        private int CalculateLifeSupportRating() => GetOxygenRating(new(diagnostics)) * GetCo2ScrubberRating(new(diagnostics));
+        private int LifeSupportRating() => OxygenValue(new(diagnostics)) * CarbonDioxideValue(new(diagnostics));
 
-        private int GetOxygenRating(List<int> remainingDiagnostics)
+        private int OxygenValue(List<int> remainingDiagnostics)
         {
             int sum = 0;
 
@@ -65,7 +59,7 @@ namespace Aoc2021.Solutions
             return sum;
         }
 
-        private int GetCo2ScrubberRating(List<int> remainingDiagnostics)
+        private int CarbonDioxideValue(List<int> remainingDiagnostics)
         {
             int sum = 0;
 

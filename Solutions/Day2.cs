@@ -8,13 +8,7 @@ namespace Aoc2021.Solutions
 
         public override int Day => 2;
 
-        public override IEnumerable<object> Solve()
-        {
-            yield return PartOne(Data);
-            yield return PartTwo(Data);
-        }
-
-        long PartOne(string[] data)
+        public override object PartOne(string[] data)
         {
             var values = data.Select(s => s.Split(' '))
                 .GroupBy(s => s[0])
@@ -23,7 +17,7 @@ namespace Aoc2021.Solutions
             return (values["down"].Sum() - values["up"].Sum()) * values["forward"].Sum();
         }
 
-        long PartTwo(string[] data)
+        public override object PartTwo(string[] data)
         {
             var commands = data.Select(s => s.Split(' ')).ToList();
             int aim = 0, depth = 0, pos = 0;

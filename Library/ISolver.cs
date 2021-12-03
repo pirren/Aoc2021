@@ -5,7 +5,8 @@
         public string ProblemName { get; }
         public int Day { get; }
         public string[] Data { get; }
-        public IEnumerable<object> Solve();
+        public object PartOne(string[] Data);
+        public object PartTwo(string[] Data);
     }
 
 }
