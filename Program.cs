@@ -2,8 +2,8 @@
 
 bool developmentMode = false;
 
-IEnumerable<ISolver> solvers = AocCore.Solvers();
-IEnumerable<Action> actions = solvers.Select(solver => new Action(solver.ProcessSolutions));
+IEnumerable<ISolver> solvers = AocCore<ISolver>.Get();
+IEnumerable<Action> actions = solvers.Select(solver => new Action(solver.RunProblems));
 
 if(developmentMode)
 {
@@ -11,6 +11,6 @@ if(developmentMode)
 }
 else
 {
-    actions.ToList().ForEach(action => action.Invoke());
+    actions.ForEach(action => action.Invoke());
 }
 
