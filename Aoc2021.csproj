@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Day1\" />
+    <None Update="Indata\1.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Indata\3.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Indata\2.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
