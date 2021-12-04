@@ -3,21 +3,6 @@ using System.Reflection;
 
 namespace Aoc2021.Library
 {
-    public static class AocCore<T> where T : class
-    {
-        public static List<T> Get()
-            => Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .NotNull()
-                .Where(t => t.IsClass)
-                .GroupBy(t => t.Namespace)
-                .SelectMany(s => s)
-                .Where(x => x.Name.Contains("Day") && x.Name != "DayBase")
-                .Select(s => (T?)Activator.CreateInstance(s) ?? null)
-                .NotNull()
-                .ToList();
-    }
-
     public static class AocCore
     {
         public static void RunProblems(this ISolver solver)
@@ -27,9 +12,9 @@ namespace Aoc2021.Library
             Console.WriteLine($"Day: " + solver.Day + Environment.NewLine);
 
             stopWatch.Start();
-            Console.WriteLine("Part 1: " + solver.PartOne(solver.Data) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
+            Console.WriteLine("Part 1: " + solver.PartOne(solver.Indata) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
             stopWatch.Start();
-            Console.WriteLine("Part 2: " + solver.PartTwo(solver.Data) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
+            Console.WriteLine("Part 2: " + solver.PartTwo(solver.Indata) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
             stopWatch.Stop();
 
             Console.Write("\n");
@@ -42,6 +27,24 @@ namespace Aoc2021.Library
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             foreach (T item in source) action(item);
+        }
+
+        public static class Activation<T> where T : class
+        {
+            static string[] BlackList = new[] { "DayBase" };
+            static string[] WhiteList = new[] { "Day" };
+
+            public static List<T> Get()
+                => Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .NotNull()
+                    .Where(t => t.IsClass)
+                    .GroupBy(t => t.Namespace)
+                    .SelectMany(s => s)
+                    .Where(x => WhiteList.Any(n => x.Name.Contains(n)) && !BlackList.Any(n => n == x.Name))
+                    .Select(s => (T?)Activator.CreateInstance(s) ?? null)
+                    .NotNull()
+                    .ToList();
         }
     }
 }

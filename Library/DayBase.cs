@@ -2,10 +2,10 @@
 {
     public abstract class DayBase : ISolver
     {
-        public string[] Data => File.ReadAllLines(Path.Combine("indata", Day + ".in"));
-        public abstract string ProblemName { get; }
-        public abstract int Day { get; }
-        public abstract object PartOne(string[] Data);
-        public abstract object PartTwo(string[] Data);
+        public virtual string Indata => File.ReadAllText(Path.Combine("indata", Day + ".in"));
+        public virtual string ProblemName => throw new NotImplementedException();
+        public virtual int Day => throw new NotImplementedException();
+        public abstract object PartOne(string Indata);
+        public abstract object PartTwo(string Indata);
     }
 }

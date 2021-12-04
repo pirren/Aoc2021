@@ -11,10 +11,10 @@ namespace Aoc2021.Solutions
         private static List<int> diagnostics = new();
         private static int reportItemLength;
 
-        public override object PartOne(string[] data)
+        public override object PartOne(string indata)
         {
-            reportItemLength = data.First().Length;
-            diagnostics = ParseDiagnostics(data);
+            reportItemLength = indata.Split(Environment.NewLine).First().Length;
+            diagnostics = ParseDiagnostics(indata.Split(Environment.NewLine));
 
             int gammaRate = Enumerable.Range(0, reportItemLength)
                 .Select(pos => diagnostics.Count(b => (b & (1 << pos)) != 0) > diagnostics.Count() / 2 ? 1 << pos : 0)
@@ -23,10 +23,10 @@ namespace Aoc2021.Solutions
             return gammaRate * (4095 ^ gammaRate);
         }
 
-        public override object PartTwo(string[] data)
+        public override object PartTwo(string indata)
         {
-            reportItemLength = data.First().Length;
-            diagnostics = ParseDiagnostics(data);
+            reportItemLength = indata.Split(Environment.NewLine).First().Length;
+            diagnostics = ParseDiagnostics(indata.Split(Environment.NewLine));
 
             return LifeSupportRating();
         }

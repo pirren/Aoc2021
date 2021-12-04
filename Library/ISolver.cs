@@ -4,9 +4,9 @@
     {
         public string ProblemName { get; }
         public int Day { get; }
-        public string[] Data { get; }
-        public object PartOne(string[] Data);
-        public object PartTwo(string[] Data);
+        public string Indata { get; }
+        public object PartOne(string Indata);
+        public object PartTwo(string Indata);
     }
 
 }

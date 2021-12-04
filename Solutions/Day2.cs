@@ -8,18 +8,20 @@ namespace Aoc2021.Solutions
 
         public override int Day => 2;
 
-        public override object PartOne(string[] data)
+        public override object PartOne(string indata)
         {
-            var values = data.Select(s => s.Split(' '))
+            var instructions = indata.Split('\n');
+            var values = instructions.Select(s => s.Split(' '))
                 .GroupBy(s => s[0])
                 .ToDictionary(k => k.Key, v => v.ToList().Select(s => int.Parse(s[1])));
 
             return (values["down"].Sum() - values["up"].Sum()) * values["forward"].Sum();
         }
 
-        public override object PartTwo(string[] data)
+        public override object PartTwo(string indata)
         {
-            var commands = data.Select(s => s.Split(' ')).ToList();
+            var instructions = indata.Split('\n');
+            var commands = instructions.Select(s => s.Split(' ')).ToList();
             int aim = 0, depth = 0, pos = 0;
 
             commands.ForEach(command => { ExecuteCommand(command, ref aim, ref depth, ref pos); });
