@@ -47,12 +47,7 @@ namespace Aoc2021.Solutions
                     for (int x = xvals.Min(); x <= xvals.Max(); x++) Mark(x, points[0].Y, ref map);
                 }
                 if (horizontal && (points[0], points[1]).IsAngle45())
-                {
-                    InHorizontalLine(points[0], points[1]).ForEach(s =>
-                    {
-                        Mark(s.X, s.Y, ref map);
-                    });
-                }
+                    InHorizontalLine(points[0], points[1]).ForEach(s => Mark(s.X, s.Y, ref map));
             }
             return map;
         }

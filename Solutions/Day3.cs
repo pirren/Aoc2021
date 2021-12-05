@@ -5,85 +5,56 @@ namespace Aoc2021.Solutions
     public class Day3 : DayBase
     {
         public override string ProblemName => "Binary Diagnostic";
-
+        public override bool UseSample => false;
         public override int Day => 3;
 
-        private static List<int> data = new();
-        private static int reportItemLength;
+        private int itemlength = 0;
 
         public override object PartOne(string indata)
         {
-            reportItemLength = indata.Split("\r\n").First().Length;
-            data = ParseData(indata.Split("\r\n"));
+            itemlength = indata.Split("\r\n").First().Length;
+            var data = indata.Split("\r\n").Select(d => Convert.ToInt32(d, 2)).ToList();
 
-            int gammarate = Enumerable.Range(0, reportItemLength)
-                .Select(pos => data.Count(b => (b & (1 << pos)) != 0) > data.Count() / 2 ? 1 << pos : 0)
+            int gammarate = Enumerable.Range(0, itemlength)
+                .Select(pos => data.Count(b => (b & (1 << pos)) != 0) > data.Count / 2 ? 1 << pos : 0)
                 .Sum();
-            var epsilonrate = ~gammarate & (1 << reportItemLength) - 1;
+            var epsilonrate = ~gammarate & (1 << itemlength) - 1;
 
             return gammarate * epsilonrate;
         }
 
         public override object PartTwo(string indata)
         {
-            reportItemLength = indata.Split("\r\n").First().Length;
-            data = ParseData(indata.Split("\r\n"));
+            itemlength = indata.Split("\r\n").First().Length;
+            var ratingdata = indata.Split("\r\n").ToList();
 
-            return LifeSupportRating();
+            return GetRating(new List<string>(ratingdata), RatingType.Oxygen) * GetRating(new List<string>(ratingdata), RatingType.CarbonDioxide);
         }
 
-        private List<int> ParseData(string[] data)
-            => data.Select(d => Convert.ToInt32(d, 2)).ToList();
-
-        private int LifeSupportRating() => OxygenValue(new(data)) * CarbonDioxideValue(new(data));
-
-        private int OxygenValue(List<int> remaining)
+        int GetRating(List<string> rating, RatingType type)
         {
-            int oxygenValue = 0;
-
-            for (int pos = reportItemLength - 1; pos >= 0; pos--)
+            for (int pos = 0; pos < itemlength; pos++)
             {
-                if (remaining.Count == 1) return remaining[0];
+                if (rating.Count == 1) break;
 
-                var ones = remaining.Where(c => (c & (1 << pos)) != 0);
-                var oneCount = ones.Count();
-                var zeroCount = remaining.Count - oneCount;
+                var onescount = rating.Select(str => new string(str.Reverse().ToArray())).Count(c => (Convert.ToInt32(c, 2) & (1 << pos)) != 0);
+                var isone = false;
 
-                if (oneCount > zeroCount || oneCount == zeroCount)
-                {
-                    oxygenValue += 1 << pos;
-                    remaining.RemoveAll(item => !ones.Contains(item));
-                }
-                else remaining.RemoveAll(item => ones.Contains(item));
+                if(type == RatingType.Oxygen)
+                    isone = onescount > (double)rating.Count / 2 || onescount == rating.Count - onescount;
+                else 
+                    isone = onescount < (double)rating.Count / 2 && onescount != rating.Count - onescount;
+
+                if (isone) rating.RemoveAll(item => item[pos] != '1');
+                else rating.RemoveAll(item => item[pos] != '0');
             }
-
-            return oxygenValue;
+            return Convert.ToInt32(rating[0], 2);
         }
 
-        private int CarbonDioxideValue(List<int> remaining)
+        enum RatingType
         {
-            int carbondioxideValue = 0;
-
-            for (int pos = reportItemLength - 1; pos >= 0; pos--)
-            {
-                if (remaining.Count == 1) return remaining[0];
-
-                var ones = remaining.Where(c => (c & (1 << pos)) != 0);
-                var oneCount = ones.Count();
-                var zeroCount = remaining.Count - oneCount;
-
-                if (oneCount > zeroCount)
-                    remaining.RemoveAll(item => ones.Contains(item));
-                else if (oneCount == zeroCount)
-                    remaining.RemoveAll(item => ones.Contains(item));
-                else
-                {
-                    carbondioxideValue += 1 << pos;
-                    remaining.RemoveAll(item => !ones.Contains(item));
-                }
-            }
-
-            return carbondioxideValue;
+            Oxygen,
+            CarbonDioxide
         }
     }
 }

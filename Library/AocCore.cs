@@ -5,6 +5,8 @@ namespace Aoc2021.Library
 {
     public static class AocCore
     {
+        private const string solutionsNamespace = "Aoc2021.Solutions";
+
         public static void RunProblems(this ISolver solver)
         {
             var stopWatch = new Stopwatch();
@@ -35,24 +37,18 @@ namespace Aoc2021.Library
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            foreach (T item in source) action(item);
-        }
-
         public static class Activation<T> where T : class
         {
-            static string[] BlackList = new[] { "DayBase" };
             static string[] WhiteList = new[] { "Day" };
 
             public static T[] Get()
                 => Assembly.GetExecutingAssembly()
                     .GetTypes()
                     .NotNull()
-                    .Where(t => t.IsClass)
+                    .Where(t => t.IsClass && t.Namespace == solutionsNamespace)
                     .GroupBy(t => t.Namespace)
                     .SelectMany(s => s)
-                    .Where(x => WhiteList.Any(n => x.Name.Contains(n)) && !BlackList.Any(n => n == x.Name))
+                    .Where(x => WhiteList.Any(n => x.Name.Contains(n)))
                     .Select(s => (T?)Activator.CreateInstance(s) ?? null)
                     .NotNull()
                     .ToArray();

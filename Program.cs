@@ -2,8 +2,7 @@
 
 bool developmentMode = false;
 
-IEnumerable<ISolver> solvers = AocCore.Activation<ISolver>.Get();
-IEnumerable<Action> actions = solvers.Select(solver => new Action(solver.RunProblems));
+IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get().Select(solver => new Action(solver.RunProblems));
 
 if(developmentMode)
 {

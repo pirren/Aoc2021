@@ -2,11 +2,10 @@
 {
     public interface ISolver
     {
-        public string ProblemName { get; }
-        public int Day { get; }
-        public string Indata { get; }
-        public object PartOne(string Indata);
-        public object PartTwo(string Indata);
+        string ProblemName { get; }
+        int Day { get; }
+        string Indata { get; }
+        object PartOne(string Indata);
+        object PartTwo(string Indata);
     }
-
 }

@@ -44,5 +44,10 @@ namespace Aoc2021.Library
 
         public static IEnumerable<T> NotNull<T>(this IEnumerable<T?> enumerable) where T : class
             => enumerable.Where(x => x != null).Select(s => s!);
+
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (T item in source) action(item);
+        }
     }
 }
