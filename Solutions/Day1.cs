@@ -25,7 +25,7 @@ namespace Aoc2021.Solutions
             return Enumerable.Range(1, parsedData.Length - 1)
                 .Select(i => new
                 {
-                    Increased = parsedData.Skip(i).Take(3).Select(s => s.ToInt()).Sum() > parsedData.Skip(i - 1).Take(3).Select(s => s.ToInt()).Sum()
+                    Increased = parsedData.Skip(i).Take(3).Select(int.Parse).Sum() > parsedData.Skip(i - 1).Take(3).Select(int.Parse).Sum()
                 }).Count(s => s.Increased);
         }
     }

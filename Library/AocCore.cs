@@ -12,16 +12,27 @@ namespace Aoc2021.Library
             Console.WriteLine($"Day: " + solver.Day + Environment.NewLine);
 
             stopWatch.Start();
-            Console.WriteLine("Part 1: " + solver.PartOne(solver.Indata) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
-            stopWatch.Start();
-            Console.WriteLine("Part 2: " + solver.PartTwo(solver.Indata) + " (" + stopWatch.ElapsedMilliseconds + "ms)");
+            Console.Write("Part 1: ");
+            PrintResult(solver.PartOne(solver.Indata));
+            Console.Write(" (" + stopWatch.ElapsedMilliseconds + "ms)\r\n");
+            stopWatch.Restart();
+            Console.Write("Part 2: ");
+            PrintResult(solver.PartTwo(solver.Indata));
+            Console.Write(" (" + stopWatch.ElapsedMilliseconds + "ms)\r\n");
             stopWatch.Stop();
 
             Console.Write("\n");
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(new string('\u00D7', 40));
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("\n\n");
+        }
+
+        private static void PrintResult(object result)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(result);
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
