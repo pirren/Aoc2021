@@ -11,6 +11,9 @@
     <None Update="Indata\1.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Indata\5.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Indata\4.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
