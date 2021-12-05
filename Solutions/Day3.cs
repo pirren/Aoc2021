@@ -8,81 +8,82 @@ namespace Aoc2021.Solutions
 
         public override int Day => 3;
 
-        private static List<int> diagnostics = new();
+        private static List<int> data = new();
         private static int reportItemLength;
 
         public override object PartOne(string indata)
         {
-            reportItemLength = indata.Split(Environment.NewLine).First().Length;
-            diagnostics = ParseDiagnostics(indata.Split(Environment.NewLine));
+            reportItemLength = indata.Split("\r\n").First().Length;
+            data = ParseData(indata.Split("\r\n"));
 
-            int gammaRate = Enumerable.Range(0, reportItemLength)
-                .Select(pos => diagnostics.Count(b => (b & (1 << pos)) != 0) > diagnostics.Count() / 2 ? 1 << pos : 0)
+            int gammarate = Enumerable.Range(0, reportItemLength)
+                .Select(pos => data.Count(b => (b & (1 << pos)) != 0) > data.Count() / 2 ? 1 << pos : 0)
                 .Sum();
+            var epsilonrate = ~gammarate & (1 << reportItemLength) - 1;
 
-            return gammaRate * (4095 ^ gammaRate);
+            return gammarate * epsilonrate;
         }
 
         public override object PartTwo(string indata)
         {
-            reportItemLength = indata.Split(Environment.NewLine).First().Length;
-            diagnostics = ParseDiagnostics(indata.Split(Environment.NewLine));
+            reportItemLength = indata.Split("\r\n").First().Length;
+            data = ParseData(indata.Split("\r\n"));
 
             return LifeSupportRating();
         }
 
-        private List<int> ParseDiagnostics(string[] data)
+        private List<int> ParseData(string[] data)
             => data.Select(d => Convert.ToInt32(d, 2)).ToList();
 
-        private int LifeSupportRating() => OxygenValue(new(diagnostics)) * CarbonDioxideValue(new(diagnostics));
+        private int LifeSupportRating() => OxygenValue(new(data)) * CarbonDioxideValue(new(data));
 
-        private int OxygenValue(List<int> remainingDiagnostics)
+        private int OxygenValue(List<int> remaining)
         {
-            int sum = 0;
+            int oxygenValue = 0;
 
             for (int pos = reportItemLength - 1; pos >= 0; pos--)
             {
-                if (remainingDiagnostics.Count == 1) return remainingDiagnostics[0];
+                if (remaining.Count == 1) return remaining[0];
 
-                var ones = remainingDiagnostics.Where(c => (c & (1 << pos)) != 0);
+                var ones = remaining.Where(c => (c & (1 << pos)) != 0);
                 var oneCount = ones.Count();
-                var zeroCount = remainingDiagnostics.Count - oneCount;
+                var zeroCount = remaining.Count - oneCount;
 
                 if (oneCount > zeroCount || oneCount == zeroCount)
                 {
-                    sum += 1 << pos;
-                    remainingDiagnostics.RemoveAll(item => !ones.Contains(item));
+                    oxygenValue += 1 << pos;
+                    remaining.RemoveAll(item => !ones.Contains(item));
                 }
-                else remainingDiagnostics.RemoveAll(item => ones.Contains(item));
+                else remaining.RemoveAll(item => ones.Contains(item));
             }
 
-            return sum;
+            return oxygenValue;
         }
 
-        private int CarbonDioxideValue(List<int> remainingDiagnostics)
+        private int CarbonDioxideValue(List<int> remaining)
         {
-            int sum = 0;
+            int carbondioxideValue = 0;
 
             for (int pos = reportItemLength - 1; pos >= 0; pos--)
             {
-                if (remainingDiagnostics.Count == 1) return remainingDiagnostics[0];
+                if (remaining.Count == 1) return remaining[0];
 
-                var ones = remainingDiagnostics.Where(c => (c & (1 << pos)) != 0);
+                var ones = remaining.Where(c => (c & (1 << pos)) != 0);
                 var oneCount = ones.Count();
-                var zeroCount = remainingDiagnostics.Count - oneCount;
+                var zeroCount = remaining.Count - oneCount;
 
                 if (oneCount > zeroCount)
-                    remainingDiagnostics.RemoveAll(item => ones.Contains(item));
+                    remaining.RemoveAll(item => ones.Contains(item));
                 else if (oneCount == zeroCount)
-                    remainingDiagnostics.RemoveAll(item => ones.Contains(item));
+                    remaining.RemoveAll(item => ones.Contains(item));
                 else
                 {
-                    sum += 1 << pos;
-                    remainingDiagnostics.RemoveAll(item => !ones.Contains(item));
+                    carbondioxideValue += 1 << pos;
+                    remaining.RemoveAll(item => !ones.Contains(item));
                 }
             }
 
-            return sum;
+            return carbondioxideValue;
         }
     }
 }

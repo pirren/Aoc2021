@@ -25,7 +25,7 @@ namespace Aoc2021.Solutions
 
         private string[,] VentMap(string indata, bool horizontal = false)
         {
-            var vents = indata.Split(Environment.NewLine)
+            var vents = indata.Split("\r\n")
                 .Select(s => s.Split(" -> ").Select(s => s.Split(',')).Select(s => new Point
                 {
                     X = int.Parse(s[0].ToString()),
@@ -59,7 +59,7 @@ namespace Aoc2021.Solutions
 
         private List<Point> InHorizontalLine(Point p1, Point p2)
         {
-            List<Point> res = new();
+            List<Point> points = new();
             var xvals = new[] { p1.X, p2.X };
             var yvals = new[] { p1.Y, p2.Y };
             var xrange = Enumerable.Range(xvals.Min(), xvals.Max() - xvals.Min() + 1).ToList();
@@ -68,9 +68,9 @@ namespace Aoc2021.Solutions
             if (p1.Y > p2.Y) yrange.Reverse();
 
             while (xrange.Any() && yrange.Any())
-                res.Add(new Point { X = xrange.PopAt(0), Y = yrange.PopAt(0) });
+                points.Add(new Point { X = xrange.PopAt(0), Y = yrange.PopAt(0) });
 
-            return res;
+            return points;
         }
     }
 }

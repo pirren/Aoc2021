@@ -14,9 +14,9 @@ namespace Aoc2021.Solutions
 
         public long BoardScore(string indata, bool keeplooking = false)
         {
-            List<BingoBoard> boards = GetBoards(indata);
+            List<Board> boards = GetBoards(indata);
 
-            var bingolines = indata.Split(Environment.NewLine + Environment.NewLine).First().Split(',').Select(int.Parse).ToList();
+            var bingolines = indata.Split("\r\n\r\n").First().Split(',').Select(int.Parse).ToList();
             int numbersdrawn = 0;
             while (bingolines.Any())
             {
@@ -28,7 +28,7 @@ namespace Aoc2021.Solutions
 
                 if (numbersdrawn >= 5)
                 {
-                    var winningboards = new List<BingoBoard>();
+                    var winningboards = new List<Board>();
                     foreach (var board in boards)
                     {
                         var bingoResult = board.Bingo();
@@ -48,7 +48,7 @@ namespace Aoc2021.Solutions
             return 0;
         }
 
-        public class BingoBoard
+        public class Board
         {
             public List<Row> Rows { get; set; } = new();
 
@@ -59,10 +59,9 @@ namespace Aoc2021.Solutions
                 if (Rows.Any(s => s.Numbers.All(num => num == -1))) return GetUnmarkedSum();
 
                 for(int i = 0; i < Rows.Count; i++)
-                {
                     if (Rows.Select(s => s.GetAt(i)).All(s => s == -1))
                         return GetUnmarkedSum();
-                }
+
                 return 0;
             }
 
@@ -80,25 +79,26 @@ namespace Aoc2021.Solutions
                 {
                     int index = Numbers.IndexOf(target);
                     Numbers[index] = -1;
-                    if (!Numbers.All(num => num != target)) Mark(target);
+                    if (!Numbers.All(num => num != target)) 
+                        Mark(target);
                 }
                 public List<int> Numbers { get; set; } = new();
             }
         }
 
-        public List<BingoBoard> GetBoards(string indata)
+        public List<Board> GetBoards(string indata)
         {
-            List <BingoBoard> boards = new();
-            var boardData = indata.Split(Environment.NewLine + Environment.NewLine).Skip(1).Select(s => s.Split(Environment.NewLine));
+            List <Board> boards = new();
+            var boardData = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split("\r\n"));
+            var debug = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split('\n'));
 
             foreach (var data in boardData)
             {
-                var board = new BingoBoard();
+                var board = new Board();
                 board.Rows.AddRange(
-                    data.Select(s => new BingoBoard.Row
+                    data.Select(s => new Board.Row
                     {
-                        Numbers = s.Replace("  ", " ").Split(' ')
-                            .Where(w => !string.IsNullOrEmpty(w))
+                        Numbers = s.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                             .Select(int.Parse)
                             .ToList()
                     })

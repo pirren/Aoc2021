@@ -23,7 +23,7 @@ namespace Aoc2021.Library
 
             Console.Write("\n");
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(new string('\u00D7', 40));
+            Console.Write(new string('\u00D7', 35));
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("\n\n");
         }
@@ -45,7 +45,7 @@ namespace Aoc2021.Library
             static string[] BlackList = new[] { "DayBase" };
             static string[] WhiteList = new[] { "Day" };
 
-            public static List<T> Get()
+            public static T[] Get()
                 => Assembly.GetExecutingAssembly()
                     .GetTypes()
                     .NotNull()
@@ -55,7 +55,7 @@ namespace Aoc2021.Library
                     .Where(x => WhiteList.Any(n => x.Name.Contains(n)) && !BlackList.Any(n => n == x.Name))
                     .Select(s => (T?)Activator.CreateInstance(s) ?? null)
                     .NotNull()
-                    .ToList();
+                    .ToArray();
         }
     }
 }
