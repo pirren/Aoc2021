@@ -5,7 +5,6 @@ namespace Aoc2021.Solutions
     public class Day3 : DayBase
     {
         public override string ProblemName => "Binary Diagnostic";
-        public override bool UseSample => false;
         public override int Day => 3;
 
         private int itemlength = 0;
@@ -41,7 +40,7 @@ namespace Aoc2021.Solutions
                 var isone = false;
 
                 if(type == RatingType.Oxygen)
-                    isone = onescount > (double)rating.Count / 2 || onescount == rating.Count - onescount;
+                    isone = onescount > rating.Count / 2 || onescount == rating.Count - onescount;
                 else 
                     isone = onescount < (double)rating.Count / 2 && onescount != rating.Count - onescount;
 

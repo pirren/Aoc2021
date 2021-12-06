@@ -1,6 +1,6 @@
 ﻿using Aoc2021.Library;
 
-bool developmentMode = false;
+bool developmentMode = true;
 
 IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get().Select(solver => new Action(solver.RunProblems));
 
