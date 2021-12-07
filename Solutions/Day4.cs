@@ -31,13 +31,13 @@ namespace Aoc2021.Solutions
                     var winningboards = new List<Board>();
                     foreach (var board in boards)
                     {
-                        var bingoResult = board.Bingo();
-                        if (bingoResult != 0)
+                        if (board.IsBingo())
                         {
-                            if(!keeplooking) return bingoResult * bingonumber;
+                            var unmarkedSum = board.UnmarkedSum;
+                            if(!keeplooking) return unmarkedSum * bingonumber;
 
                             winningboards.Add(board);
-                            if (boards.Count == 1) return bingoResult * bingonumber;
+                            if (boards.Count == 1) return unmarkedSum * bingonumber;
                         }
                     }
                     foreach (var board in winningboards)
@@ -52,17 +52,17 @@ namespace Aoc2021.Solutions
         {
             public List<Row> Rows { get; set; } = new();
 
-            public int GetUnmarkedSum() => Rows.Select(row => row.GetUnmarkedSum()).Sum();
+            public int UnmarkedSum => Rows.Select(row => row.GetUnmarkedSum()).Sum();
 
-            public int Bingo()
+            public bool IsBingo()
             {
-                if (Rows.Any(s => s.Numbers.All(num => num == -1))) return GetUnmarkedSum();
+                if (Rows.Any(s => s.Numbers.All(num => num == -1))) return true;
 
                 for(int i = 0; i < Rows.Count; i++)
                     if (Rows.Select(s => s.GetAt(i)).All(s => s == -1))
-                        return GetUnmarkedSum();
+                        return true;
 
-                return 0;
+                return false;
             }
 
             public void Mark(int target)

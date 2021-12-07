@@ -7,43 +7,36 @@ namespace Aoc2021.Solutions
         public override string ProblemName => "Lanternfish";
         public override int Day => 6;
 
-        public override object PartOne(string indata) => Simulate(indata, 80);
-        public override object PartTwo(string indata) => Simulate(indata, 256);
+        public override object PartOne(string indata) => SimulateSpawnRate(indata, 80);
+        public override object PartTwo(string indata) => SimulateSpawnRate(indata, 256);
 
-        long Simulate(string indata, int days)
+        public long SimulateSpawnRate(string indata, int days)
         {
             var data = indata.Trim().Split(',').Select(long.Parse).ToArray();
+            long[] fish = new long[9];
 
-            Dictionary<int, long> fish = Enumerable.Range(0, 9).ToDictionary(key => key, val => (long)data.Count(num => num == val));
-            int day = 0;
-            
-            do
+            for (int idx = 0; idx < fish.Length; idx++)
+                fish[idx] = data.Count(f => f == idx);
+
+            for (int day = 0; day < days; day++)
             {
-                Dictionary<int, long> copy = new();
-                for (int idx = 0; idx < fish.Count; idx++)
+                long[] copy = new long[9];
+                long spawns = 0;
+                for (int cycle = 0; cycle < fish.Length; cycle++)
                 {
-                    if (idx > 0) {
-                        try
-                        {
-                            copy.Add(idx - 1, copy.GetValueOrDefault(idx - 1, 0) + fish[idx]);
-                        }
-                        catch
-                        {
-                            copy[idx - 1] = copy.GetValueOrDefault(idx - 1, 0) + fish[idx];
-                        }
-                    }
+                    if(cycle > 0) copy[cycle - 1] += copy[cycle - 1] + fish[cycle];
                     else
                     {
-                        copy[6] = fish.GetValueOrDefault(idx, 0);
-                        copy[8] = fish.GetValueOrDefault(idx, 0);
+                        spawns = fish[cycle];
+                        copy[8] = spawns;
+                        copy[6] = spawns;
                     }
                 }
+                Array.Copy(copy, fish, fish.Length);
+                fish[6] -= spawns;
+            }
 
-                fish = copy;
-                day++;
-            } while (day < days);
-
-            return fish.Sum(val => val.Value);
+            return fish.Sum();
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     public interface ISolver
     {
+        int Order { get; }
         string ProblemName { get; }
         int Day { get; }
         string Indata { get; }

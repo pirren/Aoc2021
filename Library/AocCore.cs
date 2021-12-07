@@ -5,8 +5,6 @@ namespace Aoc2021.Library
 {
     public static class AocCore
     {
-        private const string solutionsNamespace = "Aoc2021.Solutions";
-
         public static void RunProblems(this ISolver solver)
         {
             var stopWatch = new Stopwatch();
@@ -39,17 +37,18 @@ namespace Aoc2021.Library
 
         public static class Activation<T> where T : class
         {
-            static string[] WhiteList = new[] { "Day" };
+            const string solutionsNamespace = "Aoc2021.Solutions";
+            static readonly string[] whiteList = new[] { "Day" };
 
-            public static T[] Get()
+            public static T[] Get(string[] skip)
                 => Assembly.GetExecutingAssembly()
                     .GetTypes()
                     .NotNull()
-                    .Where(t => t.IsClass && t.Namespace == solutionsNamespace)
-                    .GroupBy(t => t.Namespace)
-                    .SelectMany(s => s)
-                    .Where(x => WhiteList.Any(n => x.Name.Contains(n)))
-                    .Select(s => (T?)Activator.CreateInstance(s) ?? null)
+                    .Where(type => type.IsClass && type.Namespace == solutionsNamespace)
+                    .GroupBy(type => type.Namespace)
+                    .SelectMany(types => types)
+                    .Where(type => whiteList.Any(n => type.Name.Contains(n)) && !skip.Contains(type.Name))
+                    .Select(type => (T?)Activator.CreateInstance(type) ?? null)
                     .NotNull()
                     .ToArray();
         }
