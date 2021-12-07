@@ -24,7 +24,7 @@ namespace Aoc2021.Solutions
                 long spawns = 0;
                 for (int cycle = 0; cycle < fish.Length; cycle++)
                 {
-                    if(cycle > 0) copy[cycle - 1] += copy[cycle - 1] + fish[cycle];
+                    if (cycle > 0) copy[cycle - 1] += copy[cycle - 1] + fish[cycle];
                     else
                     {
                         spawns = fish[cycle];

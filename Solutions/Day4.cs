@@ -34,7 +34,7 @@ namespace Aoc2021.Solutions
                         if (board.IsBingo())
                         {
                             var unmarkedSum = board.UnmarkedSum;
-                            if(!keeplooking) return unmarkedSum * bingonumber;
+                            if (!keeplooking) return unmarkedSum * bingonumber;
 
                             winningboards.Add(board);
                             if (boards.Count == 1) return unmarkedSum * bingonumber;
@@ -58,7 +58,7 @@ namespace Aoc2021.Solutions
             {
                 if (Rows.Any(s => s.Numbers.All(num => num == -1))) return true;
 
-                for(int i = 0; i < Rows.Count; i++)
+                for (int i = 0; i < Rows.Count; i++)
                     if (Rows.Select(s => s.GetAt(i)).All(s => s == -1))
                         return true;
 
@@ -79,7 +79,7 @@ namespace Aoc2021.Solutions
                 {
                     int index = Numbers.IndexOf(target);
                     Numbers[index] = -1;
-                    if (!Numbers.All(num => num != target)) 
+                    if (!Numbers.All(num => num != target))
                         Mark(target);
                 }
                 public List<int> Numbers { get; set; } = new();
@@ -88,7 +88,7 @@ namespace Aoc2021.Solutions
 
         public List<Board> GetBoards(string indata)
         {
-            List <Board> boards = new();
+            List<Board> boards = new();
             var boardData = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split("\r\n"));
             var debug = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split('\n'));
 

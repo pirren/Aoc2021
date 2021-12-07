@@ -10,7 +10,8 @@ namespace Aoc2021.Solutions
         public override object PartOne(string indata) => FuelSpent(fuel => fuel, indata);
         public override object PartTwo(string indata) => FuelSpent(fuel => fuel * (1 + fuel) / 2, indata);
 
-        public object FuelSpent(Func<int, int> cost, string indata) {
+        public object FuelSpent(Func<int, int> cost, string indata)
+        {
             int[] crabpos = indata.Trim().Split(',').Select(int.Parse).ToArray();
             var low = crabpos.Min();
             var max = crabpos.Max();

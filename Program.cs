@@ -7,7 +7,7 @@ IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get(skip)
     .OrderBy(solver => solver.Order)
     .Select(solver => new Action(solver.RunProblems));
 
-if(developmentMode)
+if (developmentMode)
 {
     actions.Last().Invoke();
 }

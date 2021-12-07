@@ -36,18 +36,18 @@ namespace Aoc2021.Solutions
             {
                 if (rating.Count == 1) break;
 
-                var onescount = rating.Select(str => new string(str.Reverse().ToArray())).Count(c => (Convert.ToInt32(c, 2) & (1 << pos)) != 0);
-                var isone = false;
+                var numOnes = rating.Select(str => new string(str.Reverse().ToArray())).Count(c => (Convert.ToInt32(c, 2) & (1 << pos)) != 0);
+                var keepOnes = false;
 
-                if(type == RatingType.Oxygen)
-                    isone = onescount > rating.Count / 2 || onescount == rating.Count - onescount;
-                else 
-                    isone = onescount < (double)rating.Count / 2 && onescount != rating.Count - onescount;
+                if (type == RatingType.Oxygen)
+                    keepOnes = numOnes > rating.Count / 2 || numOnes == rating.Count - numOnes;
+                else
+                    keepOnes = numOnes < (double)rating.Count / 2 && numOnes != rating.Count - numOnes;
 
-                if (isone) rating.RemoveAll(item => item[pos] != '1');
+                if (keepOnes) rating.RemoveAll(item => item[pos] != '1');
                 else rating.RemoveAll(item => item[pos] != '0');
             }
-            return Convert.ToInt32(rating[0], 2);
+            return Convert.ToInt32(rating.Single(), 2);
         }
 
         enum RatingType

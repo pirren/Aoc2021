@@ -9,23 +9,20 @@ namespace Aoc2021.Solutions
 
         public override object PartOne(string indata)
         {
-            var parsedData = indata.Split('\n');
-            
-            return Enumerable.Range(1, parsedData.Length - 1)
-            .Select(i => new
-            {
-                Increased = parsedData[i].ToInt() > parsedData[i - 1].ToInt()
-            }).Count(s => s.Increased);
+            var data = indata.Split('\n').Select(int.Parse).ToArray();
+            return Enumerable.Range(1, data.Length - 1)
+            .Count(i =>
+                data[i] > data[i - 1]
+            );
         }
 
         public override object PartTwo(string indata)
         {
-            var parsedData = indata.Split('\n');
-            return Enumerable.Range(1, parsedData.Length - 1)
-                .Select(i => new
-                {
-                    Increased = parsedData.Skip(i).Take(3).Select(int.Parse).Sum() > parsedData.Skip(i - 1).Take(3).Select(int.Parse).Sum()
-                }).Count(s => s.Increased);
+            var data = indata.Split('\n').Select(int.Parse).ToArray();
+            return Enumerable.Range(1, data.Length - 1)
+            .Count(i =>
+                data.Skip(i).Take(3).Sum() > data.Skip(i - 1).Take(3).Sum()
+            );
         }
     }
 }
