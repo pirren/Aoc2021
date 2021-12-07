@@ -4,7 +4,7 @@ namespace Aoc2021.Solutions
 {
     public class Day4 : DayBase
     {
-        public override string ProblemName => "Giant Squid";
+        public override string Name => "Giant Squid";
 
         public override int Day => 4;
 

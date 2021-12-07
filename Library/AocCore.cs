@@ -8,7 +8,7 @@ namespace Aoc2021.Library
         public static void RunProblems(this ISolver solver)
         {
             var stopWatch = new Stopwatch();
-            Console.WriteLine("Problem name: " + solver.ProblemName);
+            Console.WriteLine("Problem name: " + solver.Name);
             Console.WriteLine($"Day: " + solver.Day + Environment.NewLine);
 
             stopWatch.Start();

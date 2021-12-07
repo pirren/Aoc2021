@@ -4,7 +4,7 @@ namespace Aoc2021.Solutions
 {
     public class Day3 : DayBase
     {
-        public override string ProblemName => "Binary Diagnostic";
+        public override string Name => "Binary Diagnostic";
         public override int Day => 3;
 
         private int itemlength = 0;

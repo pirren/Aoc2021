@@ -4,7 +4,7 @@ namespace Aoc2021.Solutions
 {
     public class Day1 : DayBase
     {
-        public override string ProblemName => "Sonar Sweep";
+        public override string Name => "Sonar Sweep";
         public override int Day => 1;
 
         public override object PartOne(string indata)

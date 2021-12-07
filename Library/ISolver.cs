@@ -3,7 +3,7 @@
     public interface ISolver
     {
         int Order { get; }
-        string ProblemName { get; }
+        string Name { get; }
         int Day { get; }
         string Indata { get; }
         object PartOne(string Indata);

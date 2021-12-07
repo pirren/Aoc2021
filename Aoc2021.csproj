@@ -29,25 +29,25 @@
     <None Update="Indata\2.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\7-sample.in">
+    <None Update="Sample\7.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\6-sample.in">
+    <None Update="Sample\6.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\5-sample.in">
+    <None Update="Sample\5.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\4-sample.in">
+    <None Update="Sample\4.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\3-sample.in">
+    <None Update="Sample\3.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\2-sample.in">
+    <None Update="Sample\2.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\1-sample.in">
+    <None Update="Sample\1.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

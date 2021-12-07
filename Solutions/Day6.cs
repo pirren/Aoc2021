@@ -4,7 +4,7 @@ namespace Aoc2021.Solutions
 {
     public class Day6 : DayBase
     {
-        public override string ProblemName => "Lanternfish";
+        public override string Name => "Lanternfish";
         public override int Day => 6;
 
         public override object PartOne(string indata) => SimulateSpawnRate(indata, 80);

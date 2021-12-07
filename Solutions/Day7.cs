@@ -4,7 +4,7 @@ namespace Aoc2021.Solutions
 {
     public class Day7 : DayBase
     {
-        public override string ProblemName => "The Treachery of Whales";
+        public override string Name => "The Treachery of Whales";
         public override int Day => 7;
 
         public override object PartOne(string indata) => FuelSpent(fuel => fuel, indata);
