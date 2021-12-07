@@ -5,7 +5,6 @@ namespace Aoc2021.Solutions
     public class Day4 : DayBase
     {
         public override string Name => "Giant Squid";
-
         public override int Day => 4;
 
         public override object PartOne(string indata) => BoardScore(indata);
@@ -88,24 +87,18 @@ namespace Aoc2021.Solutions
 
         public List<Board> GetBoards(string indata)
         {
-            List<Board> boards = new();
-            var boardData = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split("\r\n"));
+            var boarddata = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split("\r\n"));
             var debug = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split('\n'));
 
-            foreach (var data in boardData)
+            return boarddata.Select(data => new Board
             {
-                var board = new Board();
-                board.Rows.AddRange(
-                    data.Select(s => new Board.Row
-                    {
-                        Numbers = s.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                Rows = data.Select(s => new Board.Row
+                {
+                    Numbers = s.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                             .Select(int.Parse)
                             .ToList()
-                    })
-                );
-                boards.Add(board);
-            }
-            return boards;
+                }).ToList()
+            }).ToList();
         }
     }
 }
