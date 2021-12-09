@@ -7,6 +7,9 @@ namespace Aoc2021.Library
         public static int ToInt(this string str)
             => int.Parse(str);
 
+        public static int ToInt(this char ch)
+            => int.Parse(ch.ToString());
+
         public static float ToFloat(this string str)
             => float.Parse(str);
 

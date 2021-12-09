@@ -1,7 +1,7 @@
 ﻿using Aoc2021.Library;
 
 bool developmentMode = false;
-var skip = new[] { "" }; // skip list of slow solvers
+var skip = Array.Empty<string>(); 
 
 IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get(skip)
     .OrderBy(solver => solver.Order)

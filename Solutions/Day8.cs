@@ -28,7 +28,7 @@ namespace Aoc2021.Solutions
                 Dictionary<int, string> displaymap = new();
 
                 displaymap[1] = Segment(2, ref data);
-                displaymap[4] = Segment(4 ,ref data);
+                displaymap[4] = Segment(4, ref data);
                 displaymap[7] = Segment(3, ref data);
                 displaymap[8] = Segment(7, ref data);
                 displaymap[9] = Segment(6, s => s.Trim(displaymap[1].Concat(displaymap[4]).Concat(displaymap[7]).Distinct().ToArray()).Length == 1, ref data);
