@@ -26,15 +26,16 @@ namespace Aoc2021.Solutions
         public override object PartTwo(string indata)
         {
             var syntaxlines = indata.Trim().Split("\r\n");
-            var scores = AutocompleteScores(syntaxlines);
-            return scores.FirstOrDefault(num => scores.Count(c => c < num) == scores.Count(c => c > num));
+            var corruptlines = GetCorruptLines(syntaxlines).ToArray();
+            var scores = AutocompleteScores(syntaxlines, corruptlines.Select(s => s.Item1));
+            return scores.OrderBy(s => s).Skip((syntaxlines.Length - corruptlines.Length) / 2).First();
         }
 
-        IEnumerable<long> AutocompleteScores(string[] syntaxlines)
+        IEnumerable<long> AutocompleteScores(string[] syntaxlines, IEnumerable<string> corruptlines)
         {
             Dictionary<char, int> scoretable = new() { { ')', 1 }, { ']', 2 }, { '}', 3 }, { '>', 4 }, };
 
-            foreach (var line in syntaxlines.Where(line => !GetCorruptLines(syntaxlines).Select(items => items.Item1).Contains(line)))
+            foreach (var line in syntaxlines.Where(line => !corruptlines.Contains(line)))
             {
                 var syntax = string.Empty;
 
@@ -90,7 +91,6 @@ namespace Aoc2021.Solutions
     public static class Ext
     {
         public static bool IsStartTag(this char c) => new[] { '{', '[', '(', '<' }.Contains(c);
-
         public static bool IsEndTag(this char c) => new[] { '}', ']', ')', '>' }.Contains(c);
     }
 }
