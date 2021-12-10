@@ -1,6 +1,6 @@
 ﻿using Aoc2021.Library;
 
-bool developmentMode = false;
+bool developmentMode = true;
 var skip = Array.Empty<string>(); 
 
 IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get(skip)

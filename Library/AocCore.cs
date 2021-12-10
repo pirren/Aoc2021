@@ -22,7 +22,7 @@ namespace Aoc2021.Library
             stopWatch.Stop();
 
             Console.Write("\n");
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write(new string('\u00D7', 35));
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("\n\n");
