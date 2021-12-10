@@ -52,10 +52,10 @@ namespace Aoc2021.Solutions
                 }
 
                 long totalscore = 0;
-                foreach (var match in syntax.Select(s => tagpairs.FirstOrDefault(x => x.Value == s).Key).Reverse())
+                foreach (var match in syntax.Select(s => tagpairs.FirstOrDefault(x => x.Value == s).Key).Reverse()) // reverse the order
                     totalscore = (totalscore * 5) + scoretable[match];
 
-                yield return totalscore;
+                yield return totalscore; // first iter 335857468
             }
         }
 

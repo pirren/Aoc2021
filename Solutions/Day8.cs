@@ -38,10 +38,16 @@ namespace Aoc2021.Solutions
                 displaymap[6] = Segment(6, s => s.Trim(displaymap[5].ToArray()).Length == 1, ref data);
                 displaymap[0] = Segment(6, ref data);
 
-                displayvalues.Add(string.Join("", numbers.Select(num =>
-                    displaymap.Where(s => s.Value.Length == num.Length
-                        && s.Value.Trim(num.ToArray()).Length == 0)
-                    .Select(s => s.Key).Sum().ToString())).ToInt());
+                var valuetoadd = string.Join("",
+                    numbers.Select(num =>
+                        displaymap.Where(s => s.Value.Length == num.Length && s.Value.Trim(num.ToArray()).Length == 0)
+                            .Select(s => s.Key)
+                            .Sum()
+                            .ToString()
+                        ))
+                    .ToInt();
+
+                displayvalues.Add(valuetoadd);
             }
             return displayvalues.Aggregate((a, b) => a + b);
         }
