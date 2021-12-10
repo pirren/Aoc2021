@@ -1,5 +1,4 @@
 ﻿using Aoc2021.Library;
-using System.Drawing;
 
 namespace Aoc2021.Solutions
 {
@@ -7,9 +6,8 @@ namespace Aoc2021.Solutions
     {
         public override string Name => "Syntax Scoring";
         public override int Day => 10;
-        public override bool UseSample => true;
 
-        Dictionary<char, char> matchmap = new()
+        readonly Dictionary<char, char> tagpairs = new()
         {
             { '}', '{' },
             { ']', '[' },
@@ -20,13 +18,7 @@ namespace Aoc2021.Solutions
         public override object PartOne(string indata)
         {
             var syntaxlines = indata.Trim().Split("\r\n");
-            Dictionary<char, int> scoretable = new()
-            {
-                { ')', 3 },
-                { ']', 57 },
-                { '}', 1197 },
-                { '>', 25137 },
-            };
+            Dictionary<char, int> scoretable = new() { { ')', 3 }, { ']', 57 }, { '}', 1197 }, { '>', 25137 } };
 
             return GetCorruptLines(syntaxlines).Select(ch => scoretable[ch.Item2]).Aggregate((a, b) => a + b);
         }
@@ -34,91 +26,71 @@ namespace Aoc2021.Solutions
         public override object PartTwo(string indata)
         {
             var syntaxlines = indata.Trim().Split("\r\n");
-            Dictionary<char, int> scoretable = new()
-            {
-                { ')', 1 },
-                { ']', 2 },
-                { '}', 3 },
-                { '>', 4 },
-            };
+            var scores = AutocompleteScores(syntaxlines);
+            return scores.FirstOrDefault(num => scores.Count(c => c < num) == scores.Count(c => c > num));
+        }
 
-            List<int> scores = new ();
+        IEnumerable<long> AutocompleteScores(string[] syntaxlines)
+        {
+            Dictionary<char, int> scoretable = new() { { ')', 1 }, { ']', 2 }, { '}', 3 }, { '>', 4 }, };
+
             foreach (var line in syntaxlines.Where(line => !GetCorruptLines(syntaxlines).Select(items => items.Item1).Contains(line)))
             {
-                // only loop incomplete lines
-                var linelength = line.Length;
-
                 var syntax = string.Empty;
 
-                for (int i = 0; i < linelength; i++)
+                for (int i = 0; i < line.Length; i++)
                 {
-                    if (IsStartTag(line[i]))
+                    if (line[i].IsStartTag())
                         syntax += line[i];
 
-                    if (IsEndTag(line[i]))
+                    if (line[i].IsEndTag())
                     {
-                        if (matchmap[line[i]] == syntax.Last())
-                            syntax = syntax.Substring(0, syntax.Length - 1);
+                        if (tagpairs[line[i]] == syntax.Last())
+                            syntax = syntax[0..^1];
                     }
                 }
 
-                var totalscore = 0;
-                for(int i = 0; i < syntax.Length; i++)
-                {
-                    totalscore += syntax.Select(s => matchmap.FirstOrDefault(x => x.Value == s).Key).Select(s => scoretable[s] * totalscore).Aggregate((a, b) => 5 * a);
-                    scores.Add(totalscore);
-                }
+                long totalscore = 0;
+                foreach (var match in syntax.Select(s => tagpairs.FirstOrDefault(x => x.Value == s).Key).Reverse())
+                    totalscore = (totalscore * 5) + scoretable[match];
 
-                //var baselinescore = syntax.Select(s => matchmap.FirstOrDefault(x => x.Value == s).Key).Select(s => scoretable[s]);
-                //foreach(var score in baselinescore)
-
-
-                //scores.Add(syntax.Select(s => matchmap.FirstOrDefault(x => x.Value == s).Key).Select(s => scoretable[s]).Aggregate((a,b) => 5 * a));
+                yield return totalscore;
             }
-
-            //var debug = scores.Select(s => )
-
-            return 0;
         }
 
         IEnumerable<(string, char)> GetCorruptLines(string[] syntaxlines)
         {
-
-            List<(string, char)> corruptlines = new();
             foreach (var line in syntaxlines)
             {
-                var linelength = line.Length;
-
                 var syntax = string.Empty;
-                char firstcorrupt = '\0';
+                char firstcorruptsign = '\0';
 
-                for (int i = 0; i < linelength; i++)
+                for (int i = 0; i < line.Length; i++)
                 {
-                    if (IsStartTag(line[i]))
+                    if (line[i].IsStartTag())
                         syntax += line[i];
 
-                    if (IsEndTag(line[i]))
+                    if (line[i].IsEndTag())
                     {
-                        if (matchmap[line[i]] == syntax.Last())
-                            syntax = syntax.Substring(0, syntax.Length - 1);
+                        if (tagpairs[line[i]] == syntax.Last())
+                            syntax = syntax[0..^1];
                         else
                         {
-                            firstcorrupt = line[i];
+                            firstcorruptsign = line[i];
                             break;
                         }
                     }
                 }
-                if (firstcorrupt != '\0')
-                    corruptlines.Add((line, firstcorrupt));
+                if (firstcorruptsign != '\0')
+                    yield return (line, firstcorruptsign);
             }
-            return corruptlines;
         }
-
-        public bool IsStartTag(char c)
-            => new[] { '{', '[', '(', '<' }.Contains(c);
-
-        public bool IsEndTag(char c)
-            => new[] { '}', ']', ')', '>' }.Contains(c);
     }
 
+    public static class Ext
+    {
+        public static bool IsStartTag(this char c) => new[] { '{', '[', '(', '<' }.Contains(c);
+
+        public static bool IsEndTag(this char c) => new[] { '}', ']', ')', '>' }.Contains(c);
+    }
 }
