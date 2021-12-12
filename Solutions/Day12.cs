@@ -11,11 +11,10 @@ namespace Aoc2021.Solutions
 
         public override object PartOne(string indata)
         {
-            //ParseInput(indata);
-            //Node startnode = nodeTree["start"];
+            ParseInput(indata);
+            Node startnode = nodeTree["start"];
 
-            //return CalculatePaths(new(new[] { startnode })).Count();
-            return 0;
+            return CalculatePath(new(new[] { startnode })).Count();
         }
 
         public override object PartTwo(string indata)
