@@ -5,34 +5,53 @@ namespace Aoc2021.Library
 {
     public static class AocCore
     {
+        public static Dictionary<int, ConsoleColor> BenchmarkColors = new()
+        {
+            { 20, ConsoleColor.Green },
+            { 30, ConsoleColor.DarkGreen },
+            { 40, ConsoleColor.Yellow },
+            { 55, ConsoleColor.DarkYellow },
+            { 60, ConsoleColor.Red },
+            { 80, ConsoleColor.DarkRed }
+        };
+
+        public static ConsoleColor DefaultColor = ConsoleColor.White;
+
+        public static void PrintTableHeader()
+        {
+            Console.Write("Year".PadRight(10));
+            Console.Write("Day".PadRight(5));
+            Console.Write("Part".PadRight(5));
+            Console.Write("Name".PadRight(30));
+            Console.Write("Result".PadRight(25));
+            Console.Write("Duration (ms)\r\n\r\n");
+        }
+
         public static void RunProblems(this ISolver solver)
         {
             var stopWatch = new Stopwatch();
-            Console.WriteLine("Problem name: " + solver.Name);
-            Console.WriteLine($"Day: " + solver.Day + Environment.NewLine);
-
             stopWatch.Start();
-            Console.Write("Part 1: ");
-            PrintResult(solver.PartOne(solver.Indata));
-            Console.Write(" (" + stopWatch.ElapsedMilliseconds + "ms)\r\n");
+            Console.Write("2021".PadRight(10));
+            Console.Write(solver.Day.ToString().PadRight(5));
+            Console.Write("1".PadRight(5));
+            Console.Write(solver.Name.PadRight(30));
+            Console.Write(solver.PartOne(solver.Indata)?.ToString()?.PadRight(25) ?? "");
+            PrintTime(stopWatch.ElapsedMilliseconds);
             stopWatch.Restart();
-            Console.Write("Part 2: ");
-            PrintResult(solver.PartTwo(solver.Indata));
-            Console.Write(" (" + stopWatch.ElapsedMilliseconds + "ms)\r\n");
+            Console.Write("2021".PadRight(10));
+            Console.Write(solver.Day.ToString().PadRight(5));
+            Console.Write("2".PadRight(5));
+            Console.Write(solver.Name.PadRight(30));
+            Console.Write(solver.PartTwo(solver.Indata)?.ToString()?.PadRight(25) ?? "");
+            PrintTime(stopWatch.ElapsedMilliseconds);
             stopWatch.Stop();
-
-            Console.Write("\n");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(new string('\u00D7', 35));
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("\n\n");
         }
 
-        private static void PrintResult(object result)
+        private static void PrintTime(long time)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(result);
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = BenchmarkColors[BenchmarkColors.Keys.Aggregate((x, y) => Math.Abs(x - time) < Math.Abs(y - time) ? x : y)];
+            Console.Write(time.ToString() + "\r\n");
+            Console.ForegroundColor = DefaultColor;
         }
 
         public static class Activation<T> where T : class

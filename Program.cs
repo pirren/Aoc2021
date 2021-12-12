@@ -1,8 +1,10 @@
 ﻿using Aoc2021.Library;
 using System.Diagnostics;
 
-bool developmentMode = true;
-var skip = Array.Empty<string>();
+bool developmentMode = false;
+var skip = new[] { "" };
+
+Console.ForegroundColor = AocCore.DefaultColor;
 
 IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get(skip)
     .OrderBy(solver => solver.Order)
@@ -15,9 +17,14 @@ if (developmentMode)
 else
 {
     Stopwatch st = new();
+    AocCore.PrintTableHeader();
+
     st.Start();
     actions.ForEach(action => action.Invoke());
-    Console.WriteLine($"Total time solutions: {st.ElapsedMilliseconds}ms");
     st.Stop();
+
+    Console.WriteLine();
+
+    Console.WriteLine($"Total time solutions: {st.ElapsedMilliseconds}ms");
 }
 
