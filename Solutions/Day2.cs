@@ -5,7 +5,6 @@ namespace Aoc2021.Solutions
     public class Day2 : DayBase
     {
         public override string Name => "Dive!";
-
         public override int Day => 2;
 
         public override object PartOne(string indata)
@@ -32,7 +31,6 @@ namespace Aoc2021.Solutions
                     pos += value;
                     depth += aim * value;
                 }
-
             }
             return pos * depth;
         }

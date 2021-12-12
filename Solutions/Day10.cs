@@ -52,10 +52,10 @@ namespace Aoc2021.Solutions
                 }
 
                 long totalscore = 0;
-                foreach (var match in syntax.Select(s => tagpairs.FirstOrDefault(x => x.Value == s).Key).Reverse()) // reverse the order
+                foreach (var match in syntax.Select(s => tagpairs.FirstOrDefault(x => x.Value == s).Key).Reverse()) // reverse order
                     totalscore = (totalscore * 5) + scoretable[match];
 
-                yield return totalscore; // first iter 335857468
+                yield return totalscore;
             }
         }
 
@@ -88,7 +88,7 @@ namespace Aoc2021.Solutions
         }
     }
 
-    public static class Ext
+    public static partial class Ext
     {
         public static bool IsStartTag(this char c) => new[] { '{', '[', '(', '<' }.Contains(c);
         public static bool IsEndTag(this char c) => new[] { '}', ']', ')', '>' }.Contains(c);

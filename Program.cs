@@ -1,4 +1,5 @@
 ﻿using Aoc2021.Library;
+using System.Diagnostics;
 
 bool developmentMode = true;
 var skip = Array.Empty<string>(); 
@@ -13,6 +14,10 @@ if (developmentMode)
 }
 else
 {
+    Stopwatch st = new();
+    st.Start();
     actions.ForEach(action => action.Invoke());
+    Console.WriteLine($"Total time solutions: {st.ElapsedMilliseconds}ms");
+    st.Stop();
 }
 
