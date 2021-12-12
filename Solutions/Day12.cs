@@ -41,7 +41,7 @@ namespace Aoc2021.Solutions
             return RevisitCalculatePaths(startVertex).Count();
         }
 
-        private List<Node> ValidNextNodes(List<Node> queue, Node edge) 
+        private List<Node> ValidNextNodes(List<Node> queue, Node edge)
         {
             return edge.Edges
                     .Where(node => !node.IsStart)
@@ -61,7 +61,7 @@ namespace Aoc2021.Solutions
                 queue.Add(vertex);
                 return queue.Deque();
             }
-            
+
             List<string> paths = new();
             queue.Add(vertex);
 
@@ -130,7 +130,7 @@ namespace Aoc2021.Solutions
                 from.AddLink(to);
                 to.AddLink(from);
 
-                results.AddRange(new []{ from, to }.Where(s => !results.Contains(s)));
+                results.AddRange(new[] { from, to }.Where(s => !results.Contains(s)));
             }
 
             return results;
@@ -160,7 +160,7 @@ namespace Aoc2021.Solutions
         }
     }
 
-    public static partial class Ext
+    internal static partial class Ext
     {
         public static List<string> Deque(this List<Node> vertices)
             => new(new[] { string.Join(",", vertices.Select(s => s.Id)) });

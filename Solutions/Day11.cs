@@ -13,9 +13,11 @@ namespace Aoc2021.Solutions
             var rows = data.Length;
             var cols = data.First().Length;
 
-            var octopus = ModelOctopuses(data, rows, cols).ToList().Link(rows, cols);
+            var octopus = ModelOctopuses(data, rows, cols).ToList();
+            octopus = Link(octopus, rows, cols);
 
-            Enumerable.Range(0, 100).ForEach(day => {
+            Enumerable.Range(0, 100).ForEach(day =>
+            {
                 octopus.ForEach(oct => oct.Increase(day));
             });
 
@@ -28,7 +30,8 @@ namespace Aoc2021.Solutions
             var rows = data.Length;
             var cols = data.First().Length;
 
-            var octopus = ModelOctopuses(data, rows, cols).ToList().Link(rows, cols);
+            var octopus = ModelOctopuses(data, rows, cols).ToList();
+            octopus = Link(octopus, rows, cols);
 
             int steps = 0;
             while (true)
@@ -48,6 +51,48 @@ namespace Aoc2021.Solutions
             for (int y = 0; y < rows; y++)
                 for (int x = 0; x < cols; x++)
                     yield return new Octopus(data[x][y].ToInt(), x, y);
+        }
+
+
+        public static List<Octopus> Link(IEnumerable<Octopus> octopuses, int rows, int cols)
+        {
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < cols; x++)
+                {
+                    var iter = octopuses.First(oct => oct.X == x && oct.Y == y);
+
+                    // link latitudes and diagonals
+                    if (y > 0) // add north 
+                    {
+                        iter.Linked.Add(octopuses.First(oct => oct.X == x && oct.Y == y - 1));
+                        if (x < cols - 1) // add north east
+                            iter.Linked.Add(octopuses.First(oct => oct.X == x + 1 && oct.Y == y - 1));
+                    }
+
+                    if (x < cols - 1) // add east
+                    {
+                        iter.Linked.Add(octopuses.First(oct => oct.X == x + 1 && oct.Y == y));
+                        if (y < rows - 1) // add south east
+                            iter.Linked.Add(octopuses.First(oct => oct.X == x + 1 && oct.Y == y + 1));
+                    }
+
+                    if (y < rows - 1) // add south
+                    {
+                        iter.Linked.Add(octopuses.First(oct => oct.X == x && oct.Y == y + 1));
+                        if (x > 0) // add south west
+                            iter.Linked.Add(octopuses.First(oct => oct.X == x - 1 && oct.Y == y + 1));
+                    }
+
+                    if (x > 0) // add west
+                    {
+                        iter.Linked.Add(octopuses.First(oct => oct.X == x - 1 && oct.Y == y));
+                        if (y > 0) // add north west 
+                            iter.Linked.Add(octopuses.First(oct => oct.X == x - 1 && oct.Y == y - 1));
+                    }
+                }
+            }
+            return octopuses.ToList();
         }
     }
 
@@ -87,50 +132,6 @@ namespace Aoc2021.Solutions
             Y = y;
             Value = initialvalue;
             Flashes = 0;
-        }
-    }
-
-    public static partial class Ext
-    {
-        public static List<Octopus> Link(this IEnumerable<Octopus> octopuses, int rows, int cols)
-        {
-            for (int y = 0; y < rows; y++)
-            {
-                for (int x = 0; x < cols; x++)
-                {
-                    var iter = octopuses.First(oct => oct.X == x && oct.Y == y);
-
-                    // link latitudes and diagonals
-                    if (y > 0) // add north 
-                    {
-                        iter.Linked.Add(octopuses.First(oct => oct.X == x && oct.Y == y - 1));
-                        if (x < cols - 1) // add north east
-                            iter.Linked.Add(octopuses.First(oct => oct.X == x + 1 && oct.Y == y - 1));
-                    }
-
-                    if (x < cols - 1) // add east
-                    {
-                        iter.Linked.Add(octopuses.First(oct => oct.X == x + 1 && oct.Y == y));
-                        if (y < rows - 1) // add south east
-                            iter.Linked.Add(octopuses.First(oct => oct.X == x + 1 && oct.Y == y + 1));
-                    }
-
-                    if (y < rows - 1) // add south
-                    {
-                        iter.Linked.Add(octopuses.First(oct => oct.X == x && oct.Y == y + 1));
-                        if (x > 0) // add south west
-                            iter.Linked.Add(octopuses.First(oct => oct.X == x - 1 && oct.Y == y + 1));
-                    }
-
-                    if (x > 0) // add west
-                    {
-                        iter.Linked.Add(octopuses.First(oct => oct.X == x - 1 && oct.Y == y));
-                        if (y > 0) // add north west 
-                            iter.Linked.Add(octopuses.First(oct => oct.X == x - 1 && oct.Y == y - 1));
-                    }
-                }
-            }
-            return octopuses.ToList();
         }
     }
 }

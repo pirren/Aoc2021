@@ -2,7 +2,7 @@
 using System.Diagnostics;
 
 bool developmentMode = true;
-var skip = Array.Empty<string>(); 
+var skip = Array.Empty<string>();
 
 IEnumerable<Action> actions = AocCore.Activation<ISolver>.Get(skip)
     .OrderBy(solver => solver.Order)

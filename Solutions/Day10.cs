@@ -88,7 +88,7 @@ namespace Aoc2021.Solutions
         }
     }
 
-    public static partial class Ext
+    internal static partial class Ext
     {
         public static bool IsStartTag(this char c) => new[] { '{', '[', '(', '<' }.Contains(c);
         public static bool IsEndTag(this char c) => new[] { '}', ']', ')', '>' }.Contains(c);
