@@ -4,7 +4,6 @@
     {
         private const string indataFolder = "Indata";
         private const string sampleFolder = "Sample";
-
         protected string Folder => UseSample ? sampleFolder : indataFolder;
 
         public virtual string Name => throw new NotImplementedException();
