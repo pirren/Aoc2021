@@ -11,83 +11,54 @@ namespace Aoc2021.Solutions
         Dictionary<string, List<string>> Rules = new();
         Dictionary<string, long> Template = new();
 
-        List<char> Edges = new();
-
         public override object PartOne(string indata)
         {
             ParseInput(indata);
 
-            return Count(1);
+            return QuantifyElements(0);
         }
 
-        private long Count(int steps)
+        private long QuantifyElements(int steps)
         {
-            for(int i = 0; i < steps; i++)
+            Polymerize(steps);
+
+
+            return Template.Select(s => s.Value).Max() - Template.Select(s => s.Value).Min();
+        }
+
+        private void Polymerize(int steps)
+        {
+            if (steps == 0) return;
+            do
             {
                 var counter = Template.Select(s => s.Key).ToDictionary(s => s, v => 0L);
                 Template.Where(s => s.Value != 0).ForEach(type =>
                 {
-                    Rules[type.Key].ForEach(x =>
+                    Next(type.Key).ForEach(x =>
                     {
                         counter[x] += type.Value;
                     });
                 });
                 Template = counter;
-            }
-
-            //var test = 
-            Dictionary<string, long> result = Template.Select(s => s.Key)
-                .SelectMany(s => s)
-                .Distinct()
-                .ToDictionary(
-                    key => key.ToString(), 
-                    val => 0L
-                );
-
-            result.ForEach(x => result[x.Key] = Template.Where(s => s.Key[0] != s.Key[1] && s.Key.Contains(x.Key) && s.Value > 1).Sum(s => s.Value));
-            //Template.Where(s => s.Key[0] == s.Key[1]).ForEach(s => result[s.Key[..1]] += s.Value);
-            //result.ForEach(x => result[x.Key] = Template.Where(s => s.Key[0] == s.Key[1] && s.Key.Contains(x.Key) && s.Value > 1).Sum(s => s.Value));
-
-
-            var t = Template.Where(t => t.Value > 0).Select(s => s.Key).GroupBy(s => s.Select(x => x));
-
-
-            return Template.Select(s => s.Value).Max() - Template.Select(s => s.Value).Min();
-            //for (int step = 0; step < steps; step++)
-            //{
-            //    List<Pair> newpairs = new();
-            //    for (int x = 0; x < Pairs.Count; x++)
-            //    {
-            //        var left = Pairs[x].First();
-            //        var right = Pairs[x].Last();
-
-            //        var newchar = Rules[new string(Pairs[x].Couple)];
-
-            //        newpairs.Add(new Pair { Couple = new[] { left, newchar } });
-            //        newpairs.Add(new Pair { Couple = new[] { newchar, right } });
-            //    }
-            //    Pairs = newpairs;
-            //}
-
-            ////Dictionary<char, int> letterFrequency = Pairs.SelectMany(x => x.Couple).Distinct().ToDictionary(s => s, v => 0);
-
-            //var totalcount = Pairs.Where((s, i) => i % 2 != 0).SelectMany(x => x.Couple).GroupBy(s => s).Select(v => v.Count());
-            //return totalcount.Max() - totalcount.Min();
+                steps++;
+            } while (steps > 0);
         }
 
         public override object PartTwo(string indata)
         {
             ParseInput(indata);
 
-            return Count(40);
+            return QuantifyElements(40);
         }
 
-        //public List<Pair> Next(Pair p) => Rules[p];
+        public List<string> Next(string idx) => Rules[idx];
 
         void ParseInput(string indata)
         {
+            var data = indata.Trim().Split("\r\n\r\n");
+            var template = data[0];
 
-            Rules = indata.Trim().Split("\r\n\r\n")[1].Split("\r\n").Select(s => s.Split(" -> "))
+            Rules = data[1].Split("\r\n").Select(s => s.Split(" -> "))
                 .ToDictionary(s => s[0], v => new List<string>());
 
             indata.Trim().Split("\r\n\r\n")[1].Split("\r\n").Select(s => s.Split(" -> ")).ToArray().ForEach(row =>
@@ -98,13 +69,9 @@ namespace Aoc2021.Solutions
 
             Template = Rules.Select(rule => rule.Key).ToDictionary(k => k, v => 0L);
 
-            var templateRow = indata.Trim().Split("\r\n\r\n")[0];
-
-            Edges.AddRange(new [] { templateRow.First(), templateRow.Last() });
-
-            Enumerable.Range(0, templateRow.Length - 1).ForEach(idx =>
+            Enumerable.Range(0, template.Length - 1).ForEach(idx =>
             {
-                Template[new string(new[] { templateRow[idx], templateRow[idx + 1] })] = 1;
+                Template[new string(new[] { template[idx], template[idx + 1] })] = 1;
             });
         }
     }
