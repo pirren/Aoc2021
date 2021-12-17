@@ -14,6 +14,9 @@
     <None Update="Indata\10.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Indata\14.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Indata\13.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -45,6 +48,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Indata\2.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sample\14.in">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Sample\13.in">

@@ -2,7 +2,7 @@
 
 namespace Aoc2021.Library
 {
-    public static class Extensions
+    public static partial class Ext
     {
         public static int ToInt(this string str)
             => int.Parse(str);

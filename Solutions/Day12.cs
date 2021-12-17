@@ -68,20 +68,20 @@ namespace Aoc2021.Solutions
                     .Where(node => node.IsBig || !currentPath.Contains(node) ||
                                    currentPath.Where(node => node.IsSmall).Count() == currentPath.Where(node => node.IsSmall).Distinct().Count())
                     .ToList();
-    }
 
-    public class Node
-    {
-        public string Id { get; set; }
-        public List<string> Links { get; private set; }
-        public bool IsSmall => Id.ToLower() == Id && !Id.Equals("start") && !Id.Equals("end");
-        public bool IsBig => Id.ToUpper() == Id && !Id.Equals("start") && !Id.Equals("end");
-        public bool IsStart => Id.Equals("start");
-        public bool IsEnd => Id.Equals("end");
-        public Node(string Id)
+        public class Node
         {
-            this.Id = Id;
-            Links = new();
+            public string Id { get; set; }
+            public List<string> Links { get; private set; }
+            public bool IsSmall => Id.ToLower() == Id && !Id.Equals("start") && !Id.Equals("end");
+            public bool IsBig => Id.ToUpper() == Id && !Id.Equals("start") && !Id.Equals("end");
+            public bool IsStart => Id.Equals("start");
+            public bool IsEnd => Id.Equals("end");
+            public Node(string Id)
+            {
+                this.Id = Id;
+                Links = new();
+            }
         }
     }
 }
