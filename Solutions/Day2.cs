@@ -9,7 +9,7 @@ namespace Aoc2021.Solutions
 
         public override object PartOne(string indata)
         {
-            var instructions = indata.Split('\n').Select(s => s.Split(' '))
+            var instructions = ParseData(indata)
                 .GroupBy(s => s[0])
                 .ToDictionary(k => k.Key, v => v.Select(s => int.Parse(s[1])));
 
@@ -18,7 +18,7 @@ namespace Aoc2021.Solutions
 
         public override object PartTwo(string indata)
         {
-            var instructions = indata.Split('\n').Select(s => s.Split(' ')).ToList();
+            var instructions = ParseData(indata);
             int aim = 0, depth = 0, pos = 0;
 
             foreach (var instruction in instructions)
@@ -34,5 +34,7 @@ namespace Aoc2021.Solutions
             }
             return pos * depth;
         }
+
+        private List<string[]> ParseData(string indata) => indata.Split('\n').Select(s => s.Split(' ')).ToList();
     }
 }

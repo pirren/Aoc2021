@@ -14,7 +14,7 @@ namespace Aoc2021.Solutions
             ParseInput(indata);
             Node startnode = nodeTree["start"];
 
-            return CalculatePath(new(new[] { startnode })).Count();
+            return CalculatePath(new(new[] { startnode })).Count;
         }
 
         public override object PartTwo(string indata)
@@ -22,7 +22,7 @@ namespace Aoc2021.Solutions
             ParseInput(indata);
             Node startnode = nodeTree["start"];
 
-            return CalculatePath(new(new[] { startnode }), true).Count();
+            return CalculatePath(new(new[] { startnode }), true).Count;
         }
 
         public void ParseInput(string indata)

@@ -12,7 +12,7 @@ namespace Aoc2021.Solutions
             var data = indata.Split('\n').Select(int.Parse).ToArray();
             return Enumerable.Range(1, data.Length - 1)
             .Count(i =>
-                data[i] > data[i - 1]
+                data.ElementAt(i) > data.ElementAt(i - 1)
             );
         }
 

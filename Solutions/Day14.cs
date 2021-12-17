@@ -6,42 +6,18 @@ namespace Aoc2021.Solutions
     {
         public override string Name => "Extended Polymerization";
         public override int Day => 14;
-        public override bool UseSample => true;
 
-        Dictionary<string, List<string>> Rules = new();
-        Dictionary<string, long> Template = new();
+        char polymerStart = '\0';
+        char polymerEnd = '\0';
+
+        Dictionary<string, List<string>> InsertionRules = new();
+        Dictionary<string, long> Polymer = new();
 
         public override object PartOne(string indata)
         {
             ParseInput(indata);
 
-            return QuantifyElements(0);
-        }
-
-        private long QuantifyElements(int steps)
-        {
-            Polymerize(steps);
-
-
-            return Template.Select(s => s.Value).Max() - Template.Select(s => s.Value).Min();
-        }
-
-        private void Polymerize(int steps)
-        {
-            if (steps == 0) return;
-            do
-            {
-                var counter = Template.Select(s => s.Key).ToDictionary(s => s, v => 0L);
-                Template.Where(s => s.Value != 0).ForEach(type =>
-                {
-                    Next(type.Key).ForEach(x =>
-                    {
-                        counter[x] += type.Value;
-                    });
-                });
-                Template = counter;
-                steps++;
-            } while (steps > 0);
+            return QuantifyElements(10);
         }
 
         public override object PartTwo(string indata)
@@ -51,33 +27,61 @@ namespace Aoc2021.Solutions
             return QuantifyElements(40);
         }
 
-        public List<string> Next(string idx) => Rules[idx];
+        private long QuantifyElements(int steps)
+        {
+            Polymerize(steps);
+
+            var elementCount = InsertionRules.SelectMany(x => x.Key).Distinct().ToDictionary(s => s, v => 0L);
+            foreach (var keySet in Polymer)
+            {
+                string poly = keySet.Key;
+                long amount = keySet.Value;
+                elementCount[poly[0]] += amount;
+                elementCount[poly[1]] += amount;
+            }
+            elementCount[polymerStart]++;
+            elementCount[polymerEnd]++;
+
+            var abs = elementCount.Max(s => s.Value) - elementCount.Min(s => s.Value);
+
+            return abs / 2L;
+        }
+
+        private void Polymerize(int steps)
+        {
+            if (steps == 0) return;
+
+            var newPolymer = Polymer.Select(s => s.Key).ToDictionary(s => s, v => 0L);
+
+            Polymer.ForEach(set => { Next(set.Key).ForEach(newset => { newPolymer[newset] += set.Value; }); });
+            Polymer = newPolymer;
+            Polymerize(steps - 1);
+        }
+
+        public List<string> Next(string idx) => InsertionRules[idx];
 
         void ParseInput(string indata)
         {
             var data = indata.Trim().Split("\r\n\r\n");
             var template = data[0];
 
-            Rules = data[1].Split("\r\n").Select(s => s.Split(" -> "))
+            InsertionRules = data[1].Split("\r\n").Select(s => s.Split(" -> "))
                 .ToDictionary(s => s[0], v => new List<string>());
 
-            indata.Trim().Split("\r\n\r\n")[1].Split("\r\n").Select(s => s.Split(" -> ")).ToArray().ForEach(row =>
+            data[1].Split("\r\n").Select(s => s.Split(" -> ")).ToArray().ForEach(row =>
             {
-                Rules[row[0]].Add(new string(row[0][0].ToString().Concat(row[1]).ToArray()));
-                Rules[row[0]].Add(new string(row[1].Concat(new string(row[0][1].ToString())).ToArray()));
+                InsertionRules[row[0]].Add(new string(row[0][0].ToString().Concat(row[1]).ToArray()));
+                InsertionRules[row[0]].Add(new string(row[1].Concat(new string(row[0][1].ToString())).ToArray()));
             });
 
-            Template = Rules.Select(rule => rule.Key).ToDictionary(k => k, v => 0L);
-
+            Polymer = InsertionRules.Select(rule => rule.Key).ToDictionary(k => k, v => 0L);
             Enumerable.Range(0, template.Length - 1).ForEach(idx =>
             {
-                Template[new string(new[] { template[idx], template[idx + 1] })] = 1;
+                Polymer[new string(new[] { template[idx], template[idx + 1] })] += 1L;
             });
+
+            polymerStart = template.First();
+            polymerEnd = template.Last();
         }
-    }
-
-    internal static partial class Ext
-    {
-
     }
 }
