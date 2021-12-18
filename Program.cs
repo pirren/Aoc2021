@@ -1,7 +1,7 @@
 ﻿using Aoc2021.Library;
 using System.Diagnostics;
 
-bool developmentMode = false;
+bool developmentMode = true;
 var skip = new[] { "" };
 
 Console.ForegroundColor = AocCore.DefaultColor;
