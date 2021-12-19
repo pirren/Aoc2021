@@ -24,10 +24,10 @@ namespace Aoc2021.Solutions
             return GetLowPoints(heightmap, xmax).Select(lowpoint => CalculateBasin(lowpoint, heightmap)).OrderByDescending(s => s).Take(3).Aggregate((a, b) => a * b);
         }
 
-        private long CalculateBasin(Point point, List<int[]> heightmap)
+        private long CalculateBasin(AocPoint point, List<int[]> heightmap)
             => CalculateBasin(point, heightmap, 0, new());
 
-        private long CalculateBasin(Point point, List<int[]> heightmap, int previous, List<Point> checkedPoints)
+        private long CalculateBasin(AocPoint point, List<int[]> heightmap, int previous, List<AocPoint> checkedPoints)
         {
             var currentvalue = heightmap[point.Y][point.X];
             if (currentvalue == 9 || checkedPoints.Contains(point) || currentvalue < previous) return 0;
@@ -35,23 +35,23 @@ namespace Aoc2021.Solutions
             checkedPoints.Add(point);
 
             if (point.Y > 0) // check neighbor to north
-                CalculateBasin(new Point { Y = point.Y - 1, X = point.X }, heightmap, currentvalue, checkedPoints);
+                CalculateBasin(new AocPoint { Y = point.Y - 1, X = point.X }, heightmap, currentvalue, checkedPoints);
 
             if (point.X < heightmap[0].Length - 1) // check neighbor to east
-                CalculateBasin(new Point { Y = point.Y, X = point.X + 1 }, heightmap, currentvalue, checkedPoints);
+                CalculateBasin(new AocPoint { Y = point.Y, X = point.X + 1 }, heightmap, currentvalue, checkedPoints);
 
             if (point.X > 0) // check neighbor to west
-                CalculateBasin(new Point { Y = point.Y, X = point.X - 1 }, heightmap, currentvalue, checkedPoints);
+                CalculateBasin(new AocPoint { Y = point.Y, X = point.X - 1 }, heightmap, currentvalue, checkedPoints);
 
             if (point.Y < heightmap.Count - 1) // check neighbor to south
-                CalculateBasin(new Point { Y = point.Y + 1, X = point.X }, heightmap, currentvalue, checkedPoints);
+                CalculateBasin(new AocPoint { Y = point.Y + 1, X = point.X }, heightmap, currentvalue, checkedPoints);
 
             return previous == 0 ? checkedPoints.Count : 0;
         }
 
-        private List<Point> GetLowPoints(List<int[]> heightmap, int xmax)
+        private List<AocPoint> GetLowPoints(List<int[]> heightmap, int xmax)
         {
-            List<Point> lowpoints = new();
+            List<AocPoint> lowpoints = new();
 
             for (int row = 0; row < heightmap.Count; row++)
             {
@@ -71,7 +71,7 @@ namespace Aoc2021.Solutions
                         controlvalues.Add(heightmap[row + 1][col]);
 
                     if (controlvalues.All(val => val > heightmap[row][col]))
-                        lowpoints.Add(new Point { X = col, Y = row });
+                        lowpoints.Add(new AocPoint { X = col, Y = row });
                 }
             }
 

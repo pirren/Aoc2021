@@ -7,24 +7,24 @@ namespace Aoc2021.Solutions
         public override string Name => "Binary Diagnostic";
         public override int Day => 3;
 
-        private int itemlength = 0;
+        int BitLength = 0;
 
         public override object PartOne(string indata)
         {
-            itemlength = indata.Split("\r\n").First().Length;
+            BitLength = indata.Split("\r\n").First().Length;
             var data = indata.Split("\r\n").Select(d => Convert.ToInt32(d, 2)).ToList();
 
-            int gammarate = Enumerable.Range(0, itemlength)
+            int gammarate = Enumerable.Range(0, BitLength)
                 .Select(pos => data.Count(b => (b & (1 << pos)) != 0) > data.Count / 2 ? 1 << pos : 0)
                 .Sum();
-            var epsilonrate = ~gammarate & (1 << itemlength) - 1;
+            var epsilonrate = ~gammarate & (1 << BitLength) - 1;
 
             return gammarate * epsilonrate;
         }
 
         public override object PartTwo(string indata)
         {
-            itemlength = indata.Split("\r\n").First().Length;
+            BitLength = indata.Split("\r\n").First().Length;
             var ratingdata = indata.Split("\r\n").ToList();
 
             return GetRating(new List<string>(ratingdata), RatingType.Oxygen) * GetRating(new List<string>(ratingdata), RatingType.CarbonDioxide);
@@ -32,7 +32,7 @@ namespace Aoc2021.Solutions
 
         int GetRating(List<string> rating, RatingType type)
         {
-            for (int pos = 0; pos < itemlength; pos++)
+            for (int pos = 0; pos < BitLength; pos++)
             {
                 if (rating.Count == 1) break;
 

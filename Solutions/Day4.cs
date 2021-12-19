@@ -88,8 +88,6 @@ namespace Aoc2021.Solutions
         public List<Board> GetBoards(string indata)
         {
             var boarddata = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split("\r\n"));
-            var debug = indata.Split("\r\n\r\n").Skip(1).Select(s => s.Split('\n'));
-
             return boarddata.Select(data => new Board
             {
                 Rows = data.Select(s => new Board.Row

@@ -42,13 +42,13 @@ namespace Aoc2021.Solutions
             {
                 Direction.Vertical => new Sheet()
                 {
-                    Dots = new List<Point>(Paper.Dots).Where(s => s.Y > ins.Lines).ToList(),
+                    Dots = new List<AocPoint>(Paper.Dots).Where(s => s.Y > ins.Lines).ToList(),
                     SizeX = Paper.SizeX,
                     SizeY = ins.Lines
                 },
                 Direction.Horizontal => new Sheet()
                 {
-                    Dots = new List<Point>(Paper.Dots).Where(s => s.X > ins.Lines).ToList(),
+                    Dots = new List<AocPoint>(Paper.Dots).Where(s => s.X > ins.Lines).ToList(),
                     SizeX = ins.Lines,
                     SizeY = Paper.SizeY
                 },
@@ -72,7 +72,7 @@ namespace Aoc2021.Solutions
         {
             var split = indata.Trim().Split("\r\n\r\n").Select(s => s.Split("\r\n")).ToList();
             Paper.Dots = split[0].Select(x => x.Split(','))
-                .Select(s => new Point
+                .Select(s => new AocPoint
                 {
                     X = s[0].ToInt(),
                     Y = s[1].ToInt(),
@@ -117,7 +117,7 @@ namespace Aoc2021.Solutions
 
             public void ShiftVertical()
             {
-                Dots = Dots.Select(s => new Point 
+                Dots = Dots.Select(s => new AocPoint
                 { 
                     Y = ~Convert.ToInt32(s.Y) + SizeY * 2 + 1,
                     X = s.X 
@@ -126,7 +126,7 @@ namespace Aoc2021.Solutions
 
             public void ShiftHorizontal()
             {
-                Dots = Dots.Select(s => new Point
+                Dots = Dots.Select(s => new AocPoint
                 {
                     Y = s.Y,
                     X = ~Convert.ToInt32(s.X) + SizeX * 2 + 1,
@@ -135,7 +135,7 @@ namespace Aoc2021.Solutions
 
             public int SizeX { get; set; }
             public int SizeY { get; set; }
-            public List<Point> Dots { get; set; } = new List<Point>();
+            public List<AocPoint> Dots { get; set; } = new List<AocPoint>();
         }
     }
 }

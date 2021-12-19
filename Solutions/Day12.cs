@@ -48,11 +48,12 @@ namespace Aoc2021.Solutions
             if (last.IsEnd) return new List<List<Node>> { currentPath };
 
             var validNewNodes = revisit ? ValidNextNodesRevisit(currentPath, last) : ValidNextNodes(currentPath, last);
-            if(!validNewNodes.Any()) return new List<List<Node>>();
+            if(!validNewNodes.Any()) 
+                return new List<List<Node>>();
 
             return validNewNodes
                 .Select(nextEdge => new List<List<Node>> { currentPath, new List<Node> { nextEdge } }.SelectMany(s => s).ToList())
-                .SelectMany(path => CalculatePath(path, revisit)).Where(s => s.Any()).ToList();
+                .SelectMany(path => CalculatePath(path, revisit)).ToList();
         }
 
         private List<Node> ValidNextNodes(List<Node> currentPath, Node node)
@@ -72,7 +73,7 @@ namespace Aoc2021.Solutions
         public class Node
         {
             public string Id { get; set; }
-            public List<string> Links { get; private set; }
+            public HashSet<string> Links { get; private set; }
             public bool IsSmall => Id.ToLower() == Id && !Id.Equals("start") && !Id.Equals("end");
             public bool IsBig => Id.ToUpper() == Id && !Id.Equals("start") && !Id.Equals("end");
             public bool IsStart => Id.Equals("start");

@@ -2,6 +2,12 @@
 {
     public abstract class DayBase : ISolver
     {
+        public enum SolutionPart
+        {
+            PartA,
+            PartB
+        }
+
         private const string indataFolder = "Indata";
         private const string sampleFolder = "Sample";
         protected string Folder => UseSample ? sampleFolder : indataFolder;
