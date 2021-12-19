@@ -8,69 +8,63 @@ namespace Aoc2021.Solutions
         public override string Name => "Smoke Basin";
         public override int Day => 9;
 
+        List<int[]> Heightmap = new();
+
         public override object PartOne(string indata)
         {
-            var heightmap = indata.Trim().Split("\r\n").Select(s => s.Select(ch => ch.ToInt()).ToArray()).ToList();
-            var xmax = heightmap.First().Length;
-
-            return GetLowPoints(heightmap, xmax).Select(point => heightmap[point.Y][point.X] + 1).Sum();
+            Heightmap = indata.Trim().Split("\r\n").Select(s => s.Select(ch => ch.ToInt()).ToArray()).ToList();
+            return GetLowPoints().Select(point => Heightmap[point.Y][point.X] + 1).Sum();
         }
 
         public override object PartTwo(string indata)
         {
-            var heightmap = indata.Trim().Split("\r\n").Select(s => s.Select(ch => ch.ToInt()).ToArray()).ToList();
-            var xmax = heightmap.First().Length;
+            Heightmap = indata.Trim().Split("\r\n").Select(s => s.Select(ch => ch.ToInt()).ToArray()).ToList();
 
-            return GetLowPoints(heightmap, xmax).Select(lowpoint => CalculateBasin(lowpoint, heightmap)).OrderByDescending(s => s).Take(3).Aggregate((a, b) => a * b);
+            return GetLowPoints().Select(lowpoint => CalculateBasin(lowpoint)).OrderByDescending(s => s).Take(3).Aggregate((a, b) => a * b);
         }
 
-        private long CalculateBasin(AocPoint point, List<int[]> heightmap)
-            => CalculateBasin(point, heightmap, 0, new());
+        private long CalculateBasin(AocPoint point)
+            => CalculateBasin(point, 0, new());
 
-        private long CalculateBasin(AocPoint point, List<int[]> heightmap, int previous, List<AocPoint> checkedPoints)
+        IEnumerable<AocPoint> Neighbors(AocPoint point)
+            => new List<AocPoint> {
+                    new AocPoint { Y = point.Y - 1, X = point.X },
+                    new AocPoint { Y = point.Y + 1, X = point.X },
+                    new AocPoint { Y = point.Y, X = point.X - 1 },
+                    new AocPoint { Y = point.Y, X = point.X + 1 },
+            }.Where(InBounds);
+
+        bool InBounds(AocPoint p) => p.X >= 0 && p.X < Heightmap.First().Length && p.Y >= 0 && p.Y < Heightmap.Count;
+
+        private long CalculateBasin(AocPoint point, int previous, List<AocPoint> checkedPoints)
         {
-            var currentvalue = heightmap[point.Y][point.X];
-            if (currentvalue == 9 || checkedPoints.Contains(point) || currentvalue < previous) return 0;
+            var currentvalue = Heightmap[point.Y][point.X];
+            if (currentvalue == 9 || checkedPoints.Any(p => p.Equals(point)) || currentvalue < previous) return 0;
 
             checkedPoints.Add(point);
 
-            if (point.Y > 0) // check neighbor to north
-                CalculateBasin(new AocPoint { Y = point.Y - 1, X = point.X }, heightmap, currentvalue, checkedPoints);
+            var debug = Neighbors(point).ToList();
 
-            if (point.X < heightmap[0].Length - 1) // check neighbor to east
-                CalculateBasin(new AocPoint { Y = point.Y, X = point.X + 1 }, heightmap, currentvalue, checkedPoints);
-
-            if (point.X > 0) // check neighbor to west
-                CalculateBasin(new AocPoint { Y = point.Y, X = point.X - 1 }, heightmap, currentvalue, checkedPoints);
-
-            if (point.Y < heightmap.Count - 1) // check neighbor to south
-                CalculateBasin(new AocPoint { Y = point.Y + 1, X = point.X }, heightmap, currentvalue, checkedPoints);
+            foreach (var neighbor in Neighbors(point))
+                CalculateBasin(neighbor, currentvalue, checkedPoints);
 
             return previous == 0 ? checkedPoints.Count : 0;
         }
 
-        private List<AocPoint> GetLowPoints(List<int[]> heightmap, int xmax)
+        private List<AocPoint> GetLowPoints()
         {
             List<AocPoint> lowpoints = new();
 
-            for (int row = 0; row < heightmap.Count; row++)
+            for (int row = 0; row < Heightmap.Count; row++)
             {
-                for (int col = 0; col < xmax; col++)
+                for (int col = 0; col < Heightmap.First().Length; col++)
                 {
+                    var debug = Neighbors(new AocPoint { X = col, Y = row }).ToList();
+
                     List<int> controlvalues = new();
-                    if (row > 0) // check neighbor to north
-                        controlvalues.Add(heightmap[row - 1][col]);
+                    controlvalues.AddRange(Neighbors(new AocPoint { X = col, Y = row }).Select(s => Heightmap[s.Y][s.X]));
 
-                    if (col < xmax - 1) // check neighbor to east
-                        controlvalues.Add(heightmap[row][col + 1]);
-
-                    if (col > 0) // check neighbor to west
-                        controlvalues.Add(heightmap[row][col - 1]);
-
-                    if (row < heightmap.Count - 1) // check neighbor to south
-                        controlvalues.Add(heightmap[row + 1][col]);
-
-                    if (controlvalues.All(val => val > heightmap[row][col]))
+                    if (controlvalues.All(val => val > Heightmap[row][col]))
                         lowpoints.Add(new AocPoint { X = col, Y = row });
                 }
             }
